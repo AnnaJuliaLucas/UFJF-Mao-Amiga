@@ -1,8 +1,7 @@
 # Mão amiga
-Projeto de estudo.
+Sistema web desenvolvido como projeto de estudo com foco na assistência a pessoas em situação de rua na cidade de **Juiz de Fora**. Ele visa centralizar e facilitar o trabalho de **voluntários**, **assistentes sociais** e **coordenadores** por meio de uma plataforma digital acessível e organizada.
 
-Site: https://ufjf-mao-amiga.vercel.app/
-
+🌐 Site: https://mao-amiga-ufjf.vercel.app/
 
 ## Links uteis
 - vite: https://pt.vite.dev/guide/
