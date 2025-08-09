@@ -80,7 +80,7 @@ const Eventos = () => {
   };
 
   const handleCriarEvento = () => {
-    alert('Funcionalidade de criar evento em desenvolvimento!');
+    alert('Funcionalidade em desenvolvimento!');
   };
 
   return (
