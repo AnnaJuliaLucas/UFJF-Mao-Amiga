@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
+import logo from '@/assets/logo.png';
+
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
+import {
   Home,
   FileText,
   Heart,
@@ -131,14 +133,8 @@ const Eventos = () => {
 
         {/* Logo */}
         <div className="p-6 border-t border-blue-500 mt-auto">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-blue-600 font-bold text-lg">M</span>
-            </div>
-            <div>
-              <h1 className="font-bold text-lg">Mão Amiga</h1>
-              <p className="text-blue-200 text-sm">Juntos por Quem Precisa</p>
-            </div>
+          <div>
+            <img src={logo} alt="Logo Mão Amiga" style={{ width: '200px' }} />
           </div>
         </div>
       </div>
@@ -211,7 +207,7 @@ const Eventos = () => {
               </div>
 
               {/* Botão Criar Evento */}
-              <Button 
+              <Button
                 onClick={handleCriarEvento}
                 className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap"
               >

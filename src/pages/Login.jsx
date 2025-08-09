@@ -1,4 +1,29 @@
 import React, { useState, useEffect } from 'react';
+// Função para formatar CPF
+function formatCPF(value) {
+  // Remove tudo que não é número
+  value = value.replace(/\D/g, '');
+  // Aplica a máscara
+  value = value.replace(/(\d{3})(\d)/, '$1.$2');
+  value = value.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+  value = value.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+  return value.slice(0, 14);
+}
+
+// Função para formatar telefone celular
+function formatPhone(value) {
+  value = value.replace(/\D/g, '');
+  if (!value) return '';
+  if (value.length <= 2) {
+    return `(${value}`;
+  }
+  if (value.length <= 7) {
+    // Mostra parênteses e espaço após DDD, mas só mostra espaço se houver pelo menos um número após DDD
+    return `(${value.slice(0,2)}) ${value.slice(2)}`;
+  }
+  // Mostra traço após o 7º dígito
+  return `(${value.slice(0,2)}) ${value.slice(2,7)}-${value.slice(7,11)}`;
+}
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -14,6 +39,7 @@ const Login = () => {
   const { login, register, isAuthenticated, getHomeRoute } = useAuth();
   
   const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -106,13 +132,20 @@ const Login = () => {
 
     // Validações finais
     if (!createForm.category || !createForm.newPassword) {
-      setCreateError('Categoria e senha são obrigatórios');
+      setCreateError('Todos os campos obrigatórios devem ser preenchidos');
       setIsLoading(false);
       return;
     }
 
     if (createForm.newPassword.length < 6) {
       setCreateError('A senha deve ter pelo menos 6 caracteres');
+      setIsLoading(false);
+      return;
+    }
+
+    const regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9\s]).+$/;
+    if (!regex.test(createForm.newPassword)) {
+      setCreateError('A senha deve ter números, letras e símbolos');
       setIsLoading(false);
       return;
     }
@@ -157,9 +190,16 @@ const Login = () => {
   };
 
   const handleInputChange = (field, value) => {
+    let formattedValue = value;
+    if (field === 'cpf') {
+      formattedValue = formatCPF(value);
+    }
+    if (field === 'phone') {
+      formattedValue = formatPhone(value);
+    }
     setCreateForm(prev => ({
       ...prev,
-      [field]: value
+      [field]: formattedValue
     }));
   };
 
@@ -209,7 +249,7 @@ const Login = () => {
 
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <Label htmlFor="email">E-mail</Label>
+              <Label htmlFor="email">E-mail*</Label>
               <div className="input-with-icon">
                 <Input
                   id="email"
@@ -218,7 +258,6 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={loginError ? 'error' : ''}
-                  required
                   disabled={isLoading}
                 />
                 <User className="input-icon" size={20} />
@@ -226,7 +265,7 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password">Senha*</Label>
               <div className="input-with-icon">
                 <Input
                   id="password"
@@ -235,7 +274,6 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={loginError ? 'error' : ''}
-                  required
                   disabled={isLoading}
                 />
                 <Lock className="input-icon" size={20} />
@@ -382,7 +420,6 @@ const Login = () => {
                     placeholder="Insira seu nome completo"
                     value={createForm.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    required
                     disabled={isLoading}
                   />
                 </div>
@@ -395,7 +432,6 @@ const Login = () => {
                     placeholder="Insira seu e-mail"
                     value={createForm.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    required
                     disabled={isLoading}
                   />
                 </div>
@@ -407,8 +443,9 @@ const Login = () => {
                     placeholder="000.000.000-00"
                     value={createForm.cpf}
                     onChange={(e) => handleInputChange('cpf', e.target.value)}
-                    required
                     disabled={isLoading}
+                    inputMode="numeric"
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
                   />
                 </div>
 
@@ -419,7 +456,6 @@ const Login = () => {
                     type="date"
                     value={createForm.birthDate}
                     onChange={(e) => handleInputChange('birthDate', e.target.value)}
-                    required
                     disabled={isLoading}
                   />
                 </div>
@@ -429,11 +465,12 @@ const Login = () => {
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="(32)91234-5678"
+                    placeholder="(11) 91111-1111"
                     value={createForm.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    required
                     disabled={isLoading}
+                    inputMode="numeric"
+                    pattern="\(\d{2}\) \d{5}-\d{4}"
                   />
                 </div>
 
@@ -508,15 +545,27 @@ const Login = () => {
 
                 <div className="form-group">
                   <Label htmlFor="newPassword">Crie uma senha forte*</Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    placeholder="Combinação de letras, números e símbolos"
-                    value={createForm.newPassword}
-                    onChange={(e) => handleInputChange('newPassword', e.target.value)}
-                    required
-                    disabled={isLoading}
-                  />
+                  <div className="input-with-icon">
+                    <Input
+                      id="newPassword"
+                      type={showNewPassword ? 'text' : 'password'}
+                      placeholder="Combinação de letras, números e símbolos"
+                      value={createForm.newPassword}
+                      onChange={(e) => handleInputChange('newPassword', e.target.value)}
+                      disabled={isLoading}
+                    />
+                    <Lock className="input-icon" size={20} />
+
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      disabled={isLoading}
+                      aria-label={showNewPassword ? "Ocultar senha" : "Mostrar senha"}
+                    >
+                      {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 </div>
 
                 <Button type="submit" className="create-button" disabled={isLoading}>

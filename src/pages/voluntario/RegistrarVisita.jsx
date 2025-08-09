@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { 
+import logo from '@/assets/logo.png';
+import {
   Home,
   FileText,
   Heart,
@@ -97,14 +98,8 @@ const RegistrarVisita = () => {
 
         {/* Logo */}
         <div className="p-6 border-t border-blue-500 mt-auto">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-blue-600 font-bold text-lg">M</span>
-            </div>
-            <div>
-              <h1 className="font-bold text-lg">Mão Amiga</h1>
-              <p className="text-blue-200 text-sm">Juntos por Quem Precisa</p>
-            </div>
+          <div>
+            <img src={logo} alt="Logo Mão Amiga" style={{ width: '200px' }} />
           </div>
         </div>
       </div>
@@ -141,7 +136,7 @@ const RegistrarVisita = () => {
                 </Label>
                 <Input
                   id="dataVisita"
-                  type="text"
+                  type="date"
                   placeholder="dd/mm/aaaa"
                   value={formData.dataVisita}
                   onChange={(e) => handleInputChange('dataVisita', e.target.value)}
@@ -218,7 +213,7 @@ const RegistrarVisita = () => {
               </div>
 
               {/* Botão Salvar */}
-              <Button 
+              <Button
                 onClick={handleSalvarRegistro}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
@@ -248,7 +243,7 @@ const RegistrarVisita = () => {
                       <div className="absolute top-0 bottom-0 left-1/4 w-0.5 bg-gray-300"></div>
                       <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gray-300"></div>
                       <div className="absolute top-0 bottom-0 left-3/4 w-0.5 bg-gray-300"></div>
-                      
+
                       {/* Marcador de localização */}
                       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
