@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import logo from '@/assets/logo.png';
-
+import { useAuth } from '../../contexts/AuthContext';
 import {
   Select,
   SelectContent,
@@ -17,10 +17,18 @@ import {
   Calendar,
   Bell,
   Search,
-  Plus
+  Plus,
+  LogOut
 } from 'lucide-react';
 
 const Eventos = () => {
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+
   const [filtros, setFiltros] = useState({
     pesquisa: '',
     data: '',
@@ -78,11 +86,13 @@ const Eventos = () => {
   };
 
   const handleParticipar = (eventoId) => {
-    alert(`Inscrição realizada no evento ${eventoId}!`);
+    console.log(`Participar do evento ${eventoId}`);
+    alert('Funcionalidade em desenvolvimento');
   };
 
   const handleCriarEvento = () => {
-    alert('Funcionalidade em desenvolvimento!');
+    alert('Funcionalidade em desenvolvimento');
+
   };
 
   return (
@@ -152,8 +162,17 @@ const Eventos = () => {
             </div>
             <div className="flex items-center space-x-4">
               <Bell className="w-6 h-6 text-gray-400" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                className="flex items-center space-x-2"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+
               <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-medium">J</span>
+                <span className="text-white font-medium">{user?.name[0] || 'U'}</span>
               </div>
             </div>
           </div>
@@ -220,50 +239,34 @@ const Eventos = () => {
           {/* Tabela de Eventos */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full max-w-full" style={{ tableLayout: 'fixed' }}>
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Nome do Evento
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Data
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Local
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Organizador
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Descrição
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ação
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Evento</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Local</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizador</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ação</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {eventos.map((evento, index) => (
                     <tr key={evento.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {evento.nome}
-                        </div>
+                      <td className="px-6 py-4 whitespace-nowrap truncate">
+                        <div className="text-sm font-medium text-gray-900 truncate" title={evento.nome}>{evento.nome}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{evento.data}</div>
+                      <td className="px-6 py-4 whitespace-nowrap truncate">
+                        <div className="text-sm text-gray-900 truncate" title={evento.data}>{evento.data}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{evento.local}</div>
+                      <td className="px-6 py-4 whitespace-nowrap truncate">
+                        <div className="text-sm text-gray-900 truncate" title={evento.local}>{evento.local}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{evento.organizador}</div>
+                      <td className="px-6 py-4 whitespace-nowrap truncate">
+                        <div className="text-sm text-gray-900 truncate" title={evento.organizador}>{evento.organizador}</div>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 max-w-xs truncate">
-                          {evento.descricao}
-                        </div>
+                      <td className="px-6 py-4 truncate">
+                        <div className="text-sm text-gray-900 truncate" title={evento.descricao}>{evento.descricao}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Button

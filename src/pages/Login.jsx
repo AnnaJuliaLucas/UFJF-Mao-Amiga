@@ -238,7 +238,7 @@ const Login = () => {
       <div className="login-form-container">
         <div className="login-form">
           <h1>LOGIN</h1>
-          <p className="login-subtitle">Preencha os dados do login para acessar</p>
+          <p className="login-subtitle">Preencha os dados do login para acessar<br />Campos com * são obrigatórios</p> 
           
           {loginError && (
             <div className="error-alert">
@@ -403,6 +403,8 @@ const Login = () => {
                 <X size={24} />
               </button>
             </div>
+
+            <p className="create-subtitle">Campos com * são obrigatórios</p>
 
             {createError && (
               <div className="error-alert">

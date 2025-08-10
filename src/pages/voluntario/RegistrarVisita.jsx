@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import logo from '@/assets/logo.png';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   Home,
   FileText,
@@ -13,10 +14,19 @@ import {
   Calendar,
   Bell,
   MapPin,
-  Save
+  Save,
+  LogOut
 } from 'lucide-react';
 
 const RegistrarVisita = () => {
+
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+
   const [formData, setFormData] = useState({
     dataVisita: '',
     pessoasEncontradas: '',
@@ -47,13 +57,13 @@ const RegistrarVisita = () => {
 
   const handleSalvarRegistro = () => {
     console.log('Dados do registro:', formData);
-    alert('Registro salvo com sucesso!');
+    alert('Funcionalidade em desenvolvimento');
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-blue-600 text-white flex flex-col">
+      <div className="w-64 bg-blue-600 text-white flex flex-col overflow-y-auto">
         {/* User Info */}
         <div className="p-4 border-b border-blue-500">
           <div className="flex items-center space-x-3">
@@ -117,8 +127,16 @@ const RegistrarVisita = () => {
             </div>
             <div className="flex items-center space-x-4">
               <Bell className="w-6 h-6 text-gray-400" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                className="flex items-center space-x-2"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
               <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-medium">J</span>
+                <span className="text-white font-medium">{user?.name[0] || 'U'}</span>
               </div>
             </div>
           </div>

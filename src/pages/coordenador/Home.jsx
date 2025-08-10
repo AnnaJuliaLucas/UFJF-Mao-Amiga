@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 
 const CoordenadorHome = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -89,7 +89,7 @@ const CoordenadorHome = () => {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-blue-600 text-white flex flex-col">
+      <div className="w-64 bg-blue-600 text-white flex flex-col overflow-y-auto">
         {/* User Info */}
         <div className="p-4 border-b border-blue-500">
           <div className="flex items-center space-x-3">
@@ -159,7 +159,7 @@ const CoordenadorHome = () => {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Olá, Carlos!</span>
+              <span className="text-gray-700">Olá, {user?.name || 'Usuário'}!</span>
               <Bell className="w-6 h-6 text-gray-400" />
               <Button
                 variant="ghost"
@@ -170,7 +170,7 @@ const CoordenadorHome = () => {
                 <LogOut className="h-5 w-5" />
               </Button>
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-medium">C</span>
+                <span className="text-white font-medium">{user?.name[0] || 'U'}</span>
               </div>
             </div>
           </div>
