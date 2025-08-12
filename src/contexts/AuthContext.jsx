@@ -78,8 +78,8 @@ export const AuthProvider = ({ children }) => {
       const result = registerUser(userData);
       
       if (result.success) {
-        // Após registrar, fazer login automaticamente
-        setUser(result.user);
+        // NÃO fazer login automático após registrar
+        // Retornar sucesso sem definir o usuário no estado
         return { success: true, user: result.user };
       } else {
         return { success: false, error: result.error };

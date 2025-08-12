@@ -165,7 +165,8 @@ const Login = () => {
       const result = await register(userData);
       
       if (result.success) {
-        // O redirecionamento será feito pelo useEffect
+        // Mostrar feedback de sucesso
+        alert('Conta criada com sucesso! Agora você pode fazer login com suas credenciais.');
         setShowCreateModal(false);
         setCreateStep(1);
         // Limpar formulário
